@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 
-const Day = ({day, isCurrentMonth, isToday, onDayPress, hasEvent}) => {
+const Day = ({ day, isCurrentMonth, isToday, onDayPress, hasEvent }) => {
     return (
         <TouchableOpacity onPress={() => onDayPress(day)}>
             <View

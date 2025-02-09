@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import Header from './Header';
 import Day from './Day';
 import { getCalendarMatrix } from '../utils/calendarUtils';
-import { useNavigation } from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {fetchEvents} from "../database";
 
 const Calendar = () => {
@@ -13,19 +13,22 @@ const Calendar = () => {
     const navigation = useNavigation();
     const [eventDays, setEventDays] = useState(new Set());
 
-    useEffect(() => {
-        const loadEvents = async () => {
-            const events = await fetchEvents();
-            const eventsByDate = {};
-            events.forEach(event => {
-                eventsByDate[event.date] = eventsByDate[event.date] || [];
-                eventsByDate[event.date].push(event);
-            });
-            setEvents(eventsByDate);
-            setEventDays(new Set(events.map(event => event.date)));
-        };
-        loadEvents();
-    }, [currentDate]);
+    useFocusEffect(
+        React.useCallback(() => {
+            const loadEvents = async () => {
+                const events = await fetchEvents();
+                const eventsByDate = {};
+                events.forEach(event => {
+                    eventsByDate[event.date] = eventsByDate[event.date] || [];
+                    eventsByDate[event.date].push(event);
+                });
+                setEvents(eventsByDate);
+                setEventDays(new Set(events.map(event => event.date)));
+            };
+            loadEvents();
+        }, [])
+    );
+
 
     const handlePrevMonth = () => {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));

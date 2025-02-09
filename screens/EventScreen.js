@@ -51,10 +51,10 @@ const EventScreen = ({ navigation, route }) => {
                 placeholder="Enter event name"
             />
             {editingId ? (
-                    <Button title="Update Event" onPress={updateEventHandle} style={styles.button} />
-                ) :
+                <Button title="Update Event" onPress={updateEventHandle} style={styles.button} />
+            ) : (
                 <Button title="Add Event" onPress={addEventHandle} style={styles.button} />
-            }
+            )}
 
             <FlatList
                 data={events}
@@ -77,7 +77,7 @@ const EventScreen = ({ navigation, route }) => {
             />
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
