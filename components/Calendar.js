@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Header from './Header';
 import Day from './Day';
 import { getCalendarMatrix } from '../utils/calendarUtils';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { fetchEvents } from "../database";
+import { ThemeContext } from '../utils/ThemeContext';
 
 const Calendar = ({ user }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -12,6 +13,7 @@ const Calendar = ({ user }) => {
     const [selectedDay, setSelectedDay] = useState(null);
     const navigation = useNavigation();
     const [eventDays, setEventDays] = useState(new Set());
+    const { theme } = useContext(ThemeContext);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -50,7 +52,7 @@ const Calendar = ({ user }) => {
     const calendarMatrix = getCalendarMatrix(currentDate);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, theme === 'dark' && styles.darkContainer]}>
             <Header
                 currentDate={currentDate}
                 onPrevMonth={handlePrevMonth}
@@ -83,6 +85,10 @@ const Calendar = ({ user }) => {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
+        backgroundColor: '#fff',
+    },
+    darkContainer: {
+        backgroundColor: '#333',
     },
     daysContainer: {
         marginTop: 10,

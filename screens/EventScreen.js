@@ -1,12 +1,14 @@
 import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet } from "react-native";
-import { useState, useEffect } from "react";
+import {useState, useEffect, useContext} from "react";
 import { createTable, deleteEvent, fetchEvents, insertEvent, updateEvent } from "../database";
+import { ThemeContext } from '../utils/ThemeContext';
 
 const EventScreen = ({ navigation, route }) => {
     const [events, setEvents] = useState([]);
     const [name, setName] = useState('');
     const [editingId, setEditingId] = useState(null);
     const { selectedDay, user } = route.params;
+    const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
         createTable();
@@ -42,7 +44,7 @@ const EventScreen = ({ navigation, route }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, theme === 'dark' && styles.darkContainer]}>
             <Text style={styles.title}>Events for {selectedDay}</Text>
             <TextInput
                 style={styles.input}
@@ -124,7 +126,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'gray',
         marginTop: 20,
-    }
+    },
+    darkContainer: {
+        backgroundColor: '#333',
+    },
 
 });
 

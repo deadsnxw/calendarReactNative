@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import EventScreen from './screens/EventScreen';
 import RegisterScreen from "./screens/RegisterScreen";
 import LoginScreen from "./screens/LoginScreen";
+import { ThemeProvider } from './utils/ThemeContext';
 
 const Stack = createStackNavigator();
 
@@ -13,18 +14,20 @@ function App() {
     const [user, setUser] = useState(null);
 
     return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="Register" component={RegisterScreen} />
-                <Stack.Screen name="Login">
-                    {props => <LoginScreen {...props} setUser={setUser} />}
-                </Stack.Screen>
-                <Stack.Screen name="Calendar">
-                    {props => <Calendar {...props} user={user} />}
-                </Stack.Screen>
-                <Stack.Screen name="Add Event" component={EventScreen} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <ThemeProvider>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen name="Register" component={RegisterScreen} />
+                    <Stack.Screen name="Login">
+                        {props => <LoginScreen {...props} setUser={setUser} />}
+                    </Stack.Screen>
+                    <Stack.Screen name="Calendar">
+                        {props => <Calendar {...props} user={user} />}
+                    </Stack.Screen>
+                    <Stack.Screen name="Add Event" component={EventScreen} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </ThemeProvider>
     );
 }
 
