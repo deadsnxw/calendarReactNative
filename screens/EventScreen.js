@@ -6,7 +6,7 @@ const EventScreen = ({ navigation, route }) => {
     const [events, setEvents] = useState([]);
     const [name, setName] = useState('');
     const [editingId, setEditingId] = useState(null);
-    const { selectedDay } = route.params;
+    const { selectedDay, user } = route.params;
 
     useEffect(() => {
         createTable();
@@ -14,13 +14,13 @@ const EventScreen = ({ navigation, route }) => {
     }, []);
 
     const loadEvents = async () => {
-        const allEvents = await fetchEvents();
+        const allEvents = await fetchEvents(user);
         setEvents(allEvents.filter(event => event.date === selectedDay));
     }
 
     const addEventHandle = async () => {
         if (name && selectedDay) {
-            await insertEvent(name, selectedDay);
+            await insertEvent(name, selectedDay, user);
             setName('');
             loadEvents();
             navigation.goBack();

@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Header from './Header';
 import Day from './Day';
 import { getCalendarMatrix } from '../utils/calendarUtils';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {fetchEvents} from "../database";
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { fetchEvents } from "../database";
 
-const Calendar = () => {
+const Calendar = ({ user }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [events, setEvents] = useState({});
     const [selectedDay, setSelectedDay] = useState(null);
@@ -16,7 +16,7 @@ const Calendar = () => {
     useFocusEffect(
         React.useCallback(() => {
             const loadEvents = async () => {
-                const events = await fetchEvents();
+                const events = await fetchEvents(user.username);
                 const eventsByDate = {};
                 events.forEach(event => {
                     eventsByDate[event.date] = eventsByDate[event.date] || [];
@@ -26,9 +26,8 @@ const Calendar = () => {
                 setEventDays(new Set(events.map(event => event.date)));
             };
             loadEvents();
-        }, [])
+        }, [user])
     );
-
 
     const handlePrevMonth = () => {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
@@ -45,7 +44,7 @@ const Calendar = () => {
     const handleDayPress = (day) => {
         const dateKey = day.toISOString().split('T')[0];
         setSelectedDay(dateKey);
-        navigation.navigate('Add Event', { selectedDay: dateKey });
+        navigation.navigate('Add Event', { selectedDay: dateKey, user: user.username });
     };
 
     const calendarMatrix = getCalendarMatrix(currentDate);

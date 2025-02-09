@@ -12,7 +12,8 @@ export const createTable = async () => {
             CREATE TABLE IF NOT EXISTS events (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
-                date TEXT NOT NULL
+                date TEXT NOT NULL,
+                user TEXT NOT NULL
             );
         `);
         console.log('Table created')
@@ -21,23 +22,23 @@ export const createTable = async () => {
     }
 }
 
-export const insertEvent = async (name, date) => {
-    if (!name || !date) {
+export const insertEvent = async (name, date, user) => {
+    if (!name || !date || !user) {
         return;
     }
     const database = await openDatabase();
     try {
-        const result = await database.runAsync('insert into events (name, date) values (?, ?)', name, date);
+        const result = await database.runAsync('insert into events (name, date, user) values (?, ?, ?)', name, date, user);
         console.log('Event inserted with id:', result.lastInsertRowId);
     } catch (error) {
         console.error('Error insert event:', error);
     }
 }
 
-export const fetchEvents = async () => {
+export const fetchEvents = async (user) => {
     const database = await openDatabase();
     try {
-        const allRows = await database.getAllAsync('select * from events');
+        const allRows = await database.getAllAsync('select * from events where user = ?', user);
         console.log('All Events:', allRows);
         return allRows;
     } catch (error) {
